@@ -95,24 +95,29 @@ void AGetTailCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AGetTailCharacter::Move(const FInputActionValue& Value)
 {
-	// input is a Vector2D
+	// 入力はVector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{
-		// find out which way is forward
+		// 正面方向を求める
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
+		// 前方ベクトルを取得
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
-		// get right vector 
+		// 右方向ベクトルを取得
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+		// 移動を追加 - キャラクターが空中にいないかつ落下していない場合にのみ移動を許可
+		if (!GetCharacterMovement()->IsFalling())
+		{
+			// キャラクターが空中にいない場合、移動入力を受け付ける
+			/*AddMovementInput(ForwardDirection, MovementVector.Y);
+			AddMovementInput(RightDirection, MovementVector.X);*/
+		}
+		
 	}
 }
 
