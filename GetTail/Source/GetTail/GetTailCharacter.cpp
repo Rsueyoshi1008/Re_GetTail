@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "GetTailCharacter.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -110,13 +111,9 @@ void AGetTailCharacter::Move(const FInputActionValue& Value)
 		// 右方向ベクトルを取得
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		// 移動を追加 - キャラクターが空中にいないかつ落下していない場合にのみ移動を許可
-		if (!GetCharacterMovement()->IsFalling())
-		{
-			// キャラクターが空中にいない場合、移動入力を受け付ける
-			/*AddMovementInput(ForwardDirection, MovementVector.Y);
-			AddMovementInput(RightDirection, MovementVector.X);*/
-		}
+		//移動入力を受け付ける
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
 		
 	}
 }
@@ -125,6 +122,7 @@ void AGetTailCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
 
 	if (Controller != nullptr)
 	{
